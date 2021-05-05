@@ -257,7 +257,7 @@ const Post = ({ messageCollectionPath, usersCollectionPath }) => {
             onChange={setAdditionalFields}
           />}
           {messageAudience === MessageAudience.TO_CHANNEL && <ChatIdPicker
-            chatIds={[-1001187924939]}
+            chatIds={[-1001187924939, -1001492422699]}
             {...additionalFields}
             onChange={setAdditionalFields}
           />}
