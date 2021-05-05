@@ -4,38 +4,38 @@ import _ from 'lodash'
 import Footer from '../../partials/footer'
 import Header from '../../partials/header'
 import helpers from '../../../helpers'
-import config from '../../../config'
+// import config from '../../../config'
 
 export default class extends React.Component {
-  static async getInitialProps({ query }) {
-    const gql_query = `{
-      getObjects(bucket_slug: "${config.bucket.slug}", input: {
-        read_key: "${config.bucket.read_key}"
-      })
-      {
-        _id
-        type_slug
-        slug
-        title
-        metadata
-        created_at
-      }
-    }`
-    return await axios.post(`https://graphql.cosmicjs.com/v1`, { query: gql_query })
-      .then(function (response) {
-        return {
-          cosmic: {
-            posts: _.filter(response.data.data.getObjects, (post) => {
-              return post.metadata && post.metadata.author && post.metadata.author.slug === query.slug
-            }),
-            global: _.keyBy(_.filter(response.data.data.getObjects, { type_slug: 'globals' }), 'slug')
-          }
-        }
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-  }
+  // static async getInitialProps({ query }) {
+  //   const gql_query = `{
+  //     getObjects(bucket_slug: "${config.bucket.slug}", input: {
+  //       read_key: "${config.bucket.read_key}"
+  //     })
+  //     {
+  //       _id
+  //       type_slug
+  //       slug
+  //       title
+  //       metadata
+  //       created_at
+  //     }
+  //   }`
+  //   return await axios.post(`https://graphql.cosmicjs.com/v1`, { query: gql_query })
+  //     .then(function (response) {
+  //       return {
+  //         cosmic: {
+  //           posts: _.filter(response.data.data.getObjects, (post) => {
+  //             return post.metadata && post.metadata.author && post.metadata.author.slug === query.slug
+  //           }),
+  //           global: _.keyBy(_.filter(response.data.data.getObjects, { type_slug: 'globals' }), 'slug')
+  //         }
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error)
+  //     })
+  // }
   render() {
     if (!this.props.cosmic)
       return <div>Loading...</div>

@@ -11,7 +11,7 @@ import _ from 'lodash'
 import Footer from './partials/footer'
 import H from '../components/Header'
 import helpers from '../helpers'
-import config from '../config'
+// import config from '../config'
 
 
 const Header = withAuthUser()(function () {
@@ -19,36 +19,34 @@ const Header = withAuthUser()(function () {
   return <H email={AuthUser.email} signOut={AuthUser.signOut} />
 })
 class App extends React.Component {
-  static async getInitialProps({ req }) {
-    const query = `{
-      getObjects(bucket_slug: "${config.bucket.slug}", input: {
-        read_key: "${config.bucket.read_key}"
-      })
-      {
-        _id
-        type_slug
-        slug
-        title
-        metadata
-        created_at
-      }
-    }`
-    return await axios.post(`https://graphql.cosmicjs.com/v1`, { query })
-      .then(function (response) {
-        return {
-          cosmic: {
-            posts: _.filter(response.data.data.getObjects, { type_slug: 'posts' }),
-            global: _.keyBy(_.filter(response.data.data.getObjects, { type_slug: 'globals' }), 'slug')
-          }
-        }
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-  }
+  // static async getInitialProps({ req }) {
+  //   const query = `{
+  //     getObjects(bucket_slug: "${config.bucket.slug}", input: {
+  //       read_key: "${config.bucket.read_key}"
+  //     })
+  //     {
+  //       _id
+  //       type_slug
+  //       slug
+  //       title
+  //       metadata
+  //       created_at
+  //     }
+  //   }`
+  //   return await axios.post(`https://graphql.cosmicjs.com/v1`, { query })
+  //     .then(function (response) {
+  //       return {
+  //         cosmic: {
+  //           posts: _.filter(response.data.data.getObjects, { type_slug: 'posts' }),
+  //           global: _.keyBy(_.filter(response.data.data.getObjects, { type_slug: 'globals' }), 'slug')
+  //         }
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error)
+  //     })
+  // }
   render() {
-    if (!this.props.cosmic)
-      return <div>Loading...</div>
     return (
       <div>
         <Header />
