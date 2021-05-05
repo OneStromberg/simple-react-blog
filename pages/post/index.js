@@ -207,7 +207,7 @@ const Header = withAuthUser()(function () {
   return <H email={AuthUser.email} signOut={AuthUser.signOut} />
 })
 
-const Post = ({ messageCollectionPath }) => {
+const Post = ({ messageCollectionPath, usersCollectionPath }) => {
   const collection = db.collection(messageCollectionPath);
   const AuthUser = useAuthUser()
   const [messageAudience, setMessageAudience] = useState(0)
@@ -218,7 +218,6 @@ const Post = ({ messageCollectionPath }) => {
   useEffect(() => {
     setFinalAdditionalFields({ ...finalAdditionalFields, ...additionalFields });
   }, [additionalFields]);
-  console.log('additionalFields', additionalFields);
   const onSubmit = () => {
     collection.add({
       author: AuthUser.id,
@@ -249,8 +248,16 @@ const Post = ({ messageCollectionPath }) => {
             value={message}
             onChange={({ currentTarget: { value } }) => setMessage(value)}
           />
-          {messageAudience === MessageAudience.TO_PERSON && <UserIdPicker {...additionalFields} onChange={setAdditionalFields} />}
-          {messageAudience === MessageAudience.TO_CHANNEL && <ChatIdPicker chatIds={[-1001187924939]} {...additionalFields} onChange={setAdditionalFields} />}
+          {messageAudience === MessageAudience.TO_PERSON && <UserIdPicker
+            collectionPath={usersCollectionPath}
+            {...additionalFields}
+            onChange={setAdditionalFields}
+          />}
+          {messageAudience === MessageAudience.TO_CHANNEL && <ChatIdPicker
+            chatIds={[-1001187924939]}
+            {...additionalFields}
+            onChange={setAdditionalFields}
+          />}
           {messageType === MessageType.QUIZ && <Quiz {...additionalFields} onChange={setAdditionalFields} />}
           {messageType === MessageType.POLL && <Poll {...additionalFields} onChange={setAdditionalFields} />}
           <div>
@@ -267,7 +274,8 @@ const Post = ({ messageCollectionPath }) => {
 
 export const getServerSideProps = withAuthUserTokenSSR()(({ AuthUser }) => ({
   props: {
-    messageCollectionPath: process.env.MESSAGES_COLLECTION
+    messageCollectionPath: process.env.MESSAGES_COLLECTION,
+    usersCollectionPath: process.env.USERS_COLLECTION,
   }
 }))
 
