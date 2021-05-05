@@ -65,11 +65,10 @@ function ChatIdPicker({ chatId: propsChatId = 0, chatIds = [], onChange = () => 
   )
 }
 
-function UserData({ selectedId }) {
-  const doc = db.doc('dev_users/' + selectedId);
+function UserData({ selectedId, collectionPath }) {
+  const doc = db.doc(`${collectionPath}/${selectedId}`);
   const [userValue, loading, error] = useCollection(doc);
   if (loading) return 'Loading';
-  console.log('userValue', userValue);
   return (
     <div>
       {
@@ -82,9 +81,10 @@ function UserData({ selectedId }) {
 }
 
 function UserIdPicker({
-  onChange = () => { }
+  onChange = () => { },
+  collectionPath
 }) {
-  const collection = db.collection('dev_users');
+  const collection = db.collection(collectionPath);
   const [ids, setIds] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [value, loading, error] = useCollection(collection);
@@ -109,7 +109,10 @@ function UserIdPicker({
   return (
     <>
       <ChatIdPicker chatIds={ids} onChange={callback} />
-      {selectedId && <UserData selectedId={selectedId} />}
+      {selectedId && <UserData
+        collectionPath={collectionPath}
+        selectedId={selectedId}
+      />}
     </>
   )
 }
